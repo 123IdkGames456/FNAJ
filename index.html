@@ -8,14 +8,18 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#090909;color:#ddd;font-family:Arial,Helvetica,sans-serif}
-header{position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(8,8,8,.92);border-bottom:1px solid #292929;backdrop-filter:blur(10px)}
-.nav{max-width:1150px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+header{position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(8,8,8,.94);border-bottom:1px solid #292929;backdrop-filter:blur(10px)}
+.topbar{max-width:1150px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:Georgia,serif;font-size:20px;color:#eee;letter-spacing:1px}
 .logo span{color:#777}
-nav{display:flex;gap:24px}
-nav a{color:#aaa;text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:1px}
-nav a:hover{color:#fff}
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:110px 24px 70px}
+.top-tabs{display:flex;gap:20px}
+.top-tabs a{color:#777;text-decoration:none;font-size:12px;text-transform:uppercase;letter-spacing:1.5px}
+.top-tabs a:hover{color:#ddd}
+.section-nav{border-top:1px solid #1c1c1c}
+.section-nav-inner{max-width:1150px;margin:auto;padding:11px 24px;display:flex;gap:28px}
+.section-nav a{color:#999;text-decoration:none;font-size:11px;text-transform:uppercase;letter-spacing:2px}
+.section-nav a:hover{color:#fff}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:145px 24px 70px}
 .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#090909 0%,rgba(9,9,9,.78) 38%,rgba(9,9,9,.28) 70%,#090909 100%),linear-gradient(0deg,#090909 0%,transparent 30%,transparent 70%,#090909 100%),url("Skjermbilde%202026-09-27%20214933.png") center/cover no-repeat;filter:grayscale(.3);transform:scale(1.02)}
 .hero-content{position:relative;z-index:1;max-width:1150px;width:100%;margin:auto}
 .eyebrow{font-size:12px;letter-spacing:4px;color:#777;text-transform:uppercase;margin-bottom:18px}
@@ -37,9 +41,11 @@ h2{font-family:Georgia,serif;font-size:46px;font-weight:400;margin:0 0 24px;colo
 .email:hover{color:#fff;border-color:#fff}
 footer{border-top:1px solid #222;padding:28px 24px;color:#555;text-align:center;font-size:12px;letter-spacing:1px}
 @media(max-width:700px){
-.nav{padding:16px}
-nav{gap:12px}
-nav a{font-size:10px}
+.topbar{padding:16px}
+.top-tabs{gap:12px}
+.top-tabs a{font-size:9px}
+.section-nav-inner{padding:10px 16px;gap:20px;overflow-x:auto}
+.section-nav a{font-size:9px;white-space:nowrap}
 .hero{padding-left:18px;padding-right:18px}
 .hero:before{background:linear-gradient(90deg,#090909 0%,rgba(9,9,9,.72) 100%),linear-gradient(0deg,#090909 0%,transparent 45%,#090909 100%),url("Skjermbilde%202026-09-27%20214933.png") center/cover no-repeat}
 h2{font-size:38px}
@@ -49,13 +55,19 @@ section{padding:80px 20px}
 </head>
 <body>
 <header>
-<div class="nav">
+<div class="topbar">
 <div class="logo">FNAJ <span>/</span> FIVE NIGHTS AT JØLLE</div>
-<nav>
+<div class="top-tabs">
+<a href="#">Game</a>
+<a href="#">News</a>
+</div>
+</div>
+<div class="section-nav">
+<div class="section-nav-inner">
 <a href="#home">Home</a>
 <a href="#about">About</a>
 <a href="#contact">Contact</a>
-</nav>
+</div>
 </div>
 </header>
 
@@ -64,7 +76,7 @@ section{padding:80px 20px}
 <div class="hero-content">
 <div class="eyebrow">Five Nights at Jølle</div>
 <h1>Something is waiting.<span>FNAJ</span></h1>
-<p>Five Nights at Jølle is a fan game aiming for realism and scariness. A project built around creating an unsettling experience where the world feels as real as possible.</p>
+<p>Five Nights at Jølle is a fan game aiming for realism and scariness.</p>
 <a class="button" href="#about">Enter FNAJ</a>
 </div>
 </section>
@@ -73,8 +85,8 @@ section{padding:80px 20px}
 <div class="container">
 <div class="section-label">The Project</div>
 <h2>Five Nights at Jølle</h2>
-<p>Five Nights at Jølle is a fan game aiming for realism and scariness. This is the home of the project, with more pages and information coming later.</p>
-<div class="note">More of the FNAJ world will be added to this site over time.</div>
+<p>This is the home of the FNAJ project. More pages and information will be added to the site over time.</p>
+<div class="note">More of the FNAJ world will be added here soon.</div>
 </div>
 </section>
 
