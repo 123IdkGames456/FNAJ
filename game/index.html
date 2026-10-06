@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Game</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#181713">
+<title>FNAJ — The Game</title>
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:#080808;color:#ddd;font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;overflow-x:hidden}.back{position:fixed;top:24px;left:28px;z-index:10;color:#aaa;text-decoration:none;text-transform:uppercase;font-size:10px;letter-spacing:3px;padding:14px 18px;border:1px solid #222;background:rgba(8,8,8,.7);backdrop-filter:blur(12px);border-radius:10px;transition:color .2s,border-color .2s,transform .2s}.back:hover{color:#fff;border-color:#555;transform:translateX(-3px)}main{width:min(900px,92vw);text-align:center;padding:90px 20px}.label{font-size:9px;color:#555;letter-spacing:4px;text-transform:uppercase;margin-bottom:24px}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(60px,10vw,110px);line-height:.9;letter-spacing:-5px;margin:0 0 35px;color:#eee}.game-image{width:min(760px,100%);display:block;margin:0 auto 42px;border:1px solid #222;border-radius:14px;box-shadow:0 25px 80px rgba(0,0,0,.55);opacity:.94;transition:transform .45s ease,opacity .45s ease,box-shadow .45s ease}.game-image:hover{transform:scale(1.015);opacity:1;box-shadow:0 30px 100px rgba(0,0,0,.7)}.message{font-size:18px;line-height:1.9;color:#999;max-width:680px;margin:0 auto 12px}.note{font-size:15px;line-height:1.8;color:#666;max-width:600px;margin:0 auto}.fade{animation:fade .8s ease both}@keyframes fade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@media(max-width:700px){.back{top:14px;left:14px;padding:12px 14px;font-size:8px}main{padding:90px 10px}.message{font-size:15px}h1{letter-spacing:-3px}.game-image{border-radius:10px;margin-bottom:32px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600&display=swap');
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#181713;color:#ddd8ca;font-family:Inter,Arial,sans-serif;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:10;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}.back{position:fixed;top:20px;left:22px;z-index:20;padding:11px 15px;border:1px solid #494438;background:#211f1add;color:#c6bead;text-decoration:none;font-size:9px;letter-spacing:3px;text-transform:uppercase;border-radius:5px;backdrop-filter:blur(10px);transition:.3s}.back:hover{background:#332f27;color:#fff;transform:translateX(-3px)}main{width:min(1050px,90vw);margin:auto;padding:130px 0 100px}.label{font-size:9px;color:#817967;letter-spacing:4px;text-transform:uppercase;margin-bottom:20px}h1{font-family:"Special Elite",Georgia,serif;font-size:clamp(58px,9vw,105px);font-weight:400;line-height:.9;letter-spacing:-3px;color:#eee8d9;margin:0 0 32px}.hero{text-align:center}.hero p{max-width:650px;margin:0 auto;color:#aaa392;line-height:1.9;font-size:16px}.game-image{display:block;width:min(900px,100%);margin:50px auto 0;border:1px solid #494438;padding:8px;background:#24221c;box-shadow:0 25px 80px #0008;transform:rotate(-.6deg);transition:.6s}.game-image:hover{transform:rotate(0) scale(1.01);box-shadow:0 30px 100px #000a}.status{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:30px 0}.tag{padding:9px 13px;border:1px solid #4b463a;background:#211f1a;color:#a9a18f;font-size:9px;letter-spacing:2px;text-transform:uppercase}.note{max-width:680px;margin:40px auto 0;padding:25px;border-left:2px solid #665e4c;background:#211f1a;color:#aaa392;line-height:1.8;font-size:13px;text-align:left}.actions{margin-top:35px}.home{display:inline-block;color:#d6ccb8;text-decoration:none;border-bottom:1px solid #706958;padding-bottom:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase}.home:hover{color:#fff;border-color:#fff}@media(max-width:700px){main{width:calc(100% - 36px);padding-top:115px}.back{top:12px;left:12px}.hero p{font-size:14px}.game-image{margin-top:35px;padding:5px}.note{font-size:12px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <a class="back" href="https://123idkgames456.github.io/FNAJ/home/">← Back</a>
-<main class="fade">
-<div class="label">The Game</div>
-<h1>Game</h1>
-<img class="game-image" src="../Images/Bilde_2026-09-28_120044122.png" alt="Game image">
-<p class="message">Game not out yet but Will be out on gamejolt in late 2026 or Early 2027</p>
-<p class="note">Play tests might Come in Future so Stay tuned</p>
+<main class="hero">
+<div class="label">Five Nights at Jølle / The Game</div>
+<h1>The Game</h1>
+<p>A FNAF fan game aiming for realism and scariness. Development is ongoing, and the world is still being built.</p>
+<img class="game-image" src="../Images/Bilde_2026-10-05_213933909.png" alt="Five Nights at Jølle">
+<div class="status"><span class="tag">In Development</span><span class="tag">Late 2026 / Early 2027</span><span class="tag">Playtests Possible</span></div>
+<div class="note">The game is not out yet, but it is planned to be out on Game Jolt in late 2026 or early 2027. Play tests might come in the future, so stay tuned.</div>
+<div class="actions"><a class="home" href="https://123idkgames456.github.io/FNAJ/home/">Return to the project →</a></div>
 </main>
 </body>
 </html>
