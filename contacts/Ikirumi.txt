@@ -1,4 +1,8 @@
 Name: Ikirumi
-Role: Main developer
-Also: Idea giver
+Description: Main developer and idea giver for the project.
+Role 1: Main developer
+Role 2: Idea giver
+Role 3:
+Role 4:
+Role 5:
 Profile image: Images/Ikirumi.png
