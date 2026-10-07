@@ -34,20 +34,45 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;padding:16px 22px}.site-na
 </div></main>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
- const tabs=[...document.querySelectorAll(".gallery-tab")],panels=[...document.querySelectorAll(".gallery-panel")];
+ const tabs=[...document.querySelectorAll(".gallery-tab")];
+ const panels=[...document.querySelectorAll(".gallery-panel")];
  const hashMap={images:"imagesPanel",videos:"videosPanel",audio:"audioPanel"};
- const hash=location.hash.replace("#","").toLowerCase();
- if(hashMap[hash]){const tab=document.querySelector(`[data-target="${hashMap[hash]}"]`);if(tab)tab.click()}
- function resetMedia(){
-  document.querySelectorAll(".media-card video,.media-card audio").forEach(media=>{media.pause();media.currentTime=0});
+
+ function setTab(key,updateHash=true){
+  key=(key||"").replace("#","").toLowerCase();
+  if(!hashMap[key])key="images";
+  tabs.forEach(tab=>{
+   const active=tab.dataset.target===hashMap[key];
+   tab.setAttribute("aria-expanded",active?"true":"false");
+   const panel=document.getElementById(tab.dataset.target);
+   if(panel)panel.classList.toggle("open",active);
+  });
+  const label="Gallery/"+key.charAt(0).toUpperCase()+key.slice(1);
+  const dropdown=document.querySelector(".universal-dropdown-toggle");
+  const menuButton=document.querySelector(".menu-toggle");
+  if(dropdown)dropdown.textContent=label;
+  if(menuButton)menuButton.textContent=label;
+  if(updateHash)history.replaceState(null,"","#"+key);
  }
+
  tabs.forEach(tab=>tab.addEventListener("click",()=>{
-  const target=document.getElementById(tab.dataset.target),wasOpen=target.classList.contains("open");
+  const key=Object.keys(hashMap).find(k=>hashMap[k]===tab.dataset.target);
+  setTab(key);
   resetMedia();
-  panels.forEach(panel=>panel.classList.remove("open"));tabs.forEach(item=>item.setAttribute("aria-expanded","false"));
-  if(!wasOpen){target.classList.add("open");tab.setAttribute("aria-expanded","true");const key=Object.keys(hashMap).find(k=>hashMap[k]===tab.dataset.target);if(key)history.replaceState(null,"","#"+key);const dropdown=document.querySelector(".universal-dropdown-toggle");const menuButton=document.querySelector(".menu-toggle");const label=key?("Gallery/"+key.charAt(0).toUpperCase()+key.slice(1)):"Gallery/gallery";if(dropdown)dropdown.textContent=label;if(menuButton)menuButton.textContent=label}
  }));
+
+ function resetMedia(){
+  document.querySelectorAll(".media-card video,.media-card audio").forEach(media=>{
+   media.pause();
+   media.currentTime=0;
+  });
+ }
+
+ setTab(location.hash,true);
+ addEventListener("hashchange",()=>setTab(location.hash,false));
+
  const repo="123IdkGames456/FNAJ",branch="main",api="https://api.github.com/repos/"+repo+"/contents/";
+
  async function loadMedia(folder,type,listId){
   const list=document.getElementById(listId);
   try{
@@ -59,17 +84,32 @@ document.addEventListener("DOMContentLoaded",()=>{
    if(!media.length){list.innerHTML='<div class="empty-gallery">No '+type+' files found.</div>';return}
    list.innerHTML="";
    media.forEach(file=>{
-    const card=document.createElement("article");card.className="media-card";
+    const card=document.createElement("article");
+    card.className="media-card";
     const mediaEl=document.createElement(type==="video"?"video":"audio");
-    mediaEl.controls=true;mediaEl.src=file.download_url;mediaEl.preload="metadata";
+    mediaEl.controls=true;
+    mediaEl.src=file.download_url;
+    mediaEl.preload="metadata";
     card.appendChild(mediaEl);
-    const name=document.createElement("div");name.className="media-name";name.textContent=file.name;card.appendChild(name);
-    const dl=document.createElement("a");dl.className="download";dl.href=file.download_url;dl.download=file.name;dl.textContent="↓ Download";card.appendChild(dl);
+    const name=document.createElement("div");
+    name.className="media-name";
+    name.textContent=file.name;
+    card.appendChild(name);
+    const dl=document.createElement("a");
+    dl.className="download";
+    dl.href=file.download_url;
+    dl.download=file.name;
+    dl.textContent="↓ Download";
+    card.appendChild(dl);
     list.appendChild(card);
    });
-  }catch(e){list.innerHTML='<div class="empty-gallery">Could not load '+type+' files.</div>'}
+  }catch(e){
+   list.innerHTML='<div class="empty-gallery">Could not load '+type+' files.</div>';
+  }
  }
- loadMedia("Videos","video","videosList");loadMedia("Audio","audio","audioList");
+
+ loadMedia("Videos","video","videosList");
+ loadMedia("Audio","audio","audioList");
 });
 </script>
 <script src="../dropdown/script.js"></script>
