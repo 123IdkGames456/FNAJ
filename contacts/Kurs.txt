@@ -1,0 +1,4 @@
+Name: Kurs
+Role: Idea giver
+Also: Sketch drawer
+Profile image: Images/Kurs.png
