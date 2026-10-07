@@ -19,7 +19,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;padding:16px 22px}.site-na
 <button class="gallery-tab" type="button" aria-expanded="false" data-target="videosPanel">Videos</button>
 <button class="gallery-tab" type="button" aria-expanded="false" data-target="audioPanel">Audio</button>
 </div>
-<div class="gallery-panel" id="imagesPanel"><div class="gallery">
+<div class="gallery-panel" id="imagesPanel" data-gallery="images"><div class="gallery">
 <article class="card"><div class="preview"><img src="../Images/1102960-crop0_225_1314_554-qpcmmsx4-v4.webp" alt="FNAJ image"></div><div class="name">1102960-crop0_225_1314_554-qpcmmsx4-v4.webp</div><a class="download" href="../Images/1102960-crop0_225_1314_554-qpcmmsx4-v4.webp" download>↓ Download Full Quality</a></article>
 <article class="card"><div class="preview"><img src="../Images/37df717e-2508-4332-9979-1244d0f087b2.png" alt="FNAJ image"></div><div class="name">37df717e-2508-4332-9979-1244d0f087b2.png</div><a class="download" href="../Images/37df717e-2508-4332-9979-1244d0f087b2.png" download>↓ Download Full Quality</a></article>
 <article class="card"><div class="preview"><img src="../Images/Bilde_2026-09-28_120044122.png" alt="FNAJ image"></div><div class="name">Bilde_2026-09-28_120044122.png</div><a class="download" href="../Images/Bilde_2026-09-28_120044122.png" download>↓ Download Full Quality</a></article>
@@ -29,12 +29,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;padding:16px 22px}.site-na
 <article class="card"><div class="preview"><img src="../Images/Pasted image (2).png" alt="FNAJ image"></div><div class="name">Pasted image (2).png</div><div class="name">Pasted image (2).png</div><a class="download" href="../Images/Pasted image (2).png" download>↓ Download Full Quality</a></article>
 <article class="card"><div class="preview"><img src="../Images/Skjermbilde 2026-09-27 214933.png" alt="FNAJ image"></div><div class="name">Skjermbilde 2026-09-27 214933.png</div><a class="download" href="../Images/Skjermbilde 2026-09-27 214933.png" download>↓ Download Full Quality</a></article>
 </div></div>
-<div class="gallery-panel" id="videosPanel"><div class="gallery media-list" id="videosList"><div class="empty-gallery">Loading videos...</div></div></div>
-<div class="gallery-panel" id="audioPanel"><div class="gallery media-list" id="audioList"><div class="empty-gallery">Loading audio...</div></div></div>
+<div class="gallery-panel" id="videosPanel" data-gallery="videos"><div class="gallery media-list" id="videosList"><div class="empty-gallery">Loading videos...</div></div></div>
+<div class="gallery-panel" id="audioPanel" data-gallery="audio"><div class="gallery media-list" id="audioList"><div class="empty-gallery">Loading audio...</div></div></div>
 </div></main>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
  const tabs=[...document.querySelectorAll(".gallery-tab")],panels=[...document.querySelectorAll(".gallery-panel")];
+ const hashMap={images:"imagesPanel",videos:"videosPanel",audio:"audioPanel"};
+ const hash=location.hash.replace("#","").toLowerCase();
+ if(hashMap[hash]){const tab=document.querySelector(`[data-target="${hashMap[hash]}"]`);if(tab)tab.click()}
  function resetMedia(){
   document.querySelectorAll(".media-card video,.media-card audio").forEach(media=>{media.pause();media.currentTime=0});
  }
