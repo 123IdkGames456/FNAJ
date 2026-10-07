@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const target=document.getElementById(tab.dataset.target),wasOpen=target.classList.contains("open");
   resetMedia();
   panels.forEach(panel=>panel.classList.remove("open"));tabs.forEach(item=>item.setAttribute("aria-expanded","false"));
-  if(!wasOpen){target.classList.add("open");tab.setAttribute("aria-expanded","true")}
+  if(!wasOpen){target.classList.add("open");tab.setAttribute("aria-expanded","true");const key=Object.keys(hashMap).find(k=>hashMap[k]===tab.dataset.target);if(key)history.replaceState(null,"","#"+key);const dropdown=document.querySelector(".universal-dropdown-toggle");const menuButton=document.querySelector(".menu-toggle");const label=key?("Gallery/"+key.charAt(0).toUpperCase()+key.slice(1)):"Gallery/gallery";if(dropdown)dropdown.textContent=label;if(menuButton)menuButton.textContent=label}
  }));
  const repo="123IdkGames456/FNAJ",branch="main",api="https://api.github.com/repos/"+repo+"/contents/";
  async function loadMedia(folder,type,listId){
