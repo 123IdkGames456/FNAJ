@@ -1,8 +1,8 @@
-Name: Kurs
+Name: Kuru
 Description: Idea giver and sketch drawer for the project.
 Role 1: Idea giver
 Role 2: Sketch drawer
 Role 3:
 Role 4:
 Role 5:
-Profile image: Images/Kurs.png
+Profile image: Images/Kurs.txt
