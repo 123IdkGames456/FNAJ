@@ -1,0 +1,4 @@
+Name: Jølle
+Role: Side developer
+Also: Idea giver
+Profile image: Images/Jolle.png
