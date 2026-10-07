@@ -1,4 +1,8 @@
 Name: Jølle
-Role: Side developer
-Also: Idea giver, inspiration for the in-game Jølle
+Description: Side developer, idea giver, and the inspiration for the in-game Jølle.
+Role 1: Side developer
+Role 2: Idea giver
+Role 3: Inspiration for the in-game Jølle
+Role 4:
+Role 5:
 Profile image: Images/Jolle.png
