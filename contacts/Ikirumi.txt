@@ -1,0 +1,4 @@
+Name: Ikirumi
+Role: Main developer
+Also: Idea giver, boss
+Profile image: Images/Ikirumi.png
