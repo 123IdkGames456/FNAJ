@@ -23,7 +23,8 @@
 const input=document.getElementById("input"),send=document.getElementById("send"),messages=document.getElementById("messages");
 const MODEL="gemini-3.8-flash";
 const API_BASE="https://generativelanguage.googleapis.com/v1beta";
-const GEMINI_KEY="";
+const GEMINI_KEY_FILE="./api";
+let GEMINI_KEY="";
 
 const history=[];
 let siteContext="";
@@ -36,6 +37,16 @@ function addMessage(text,user){
  row.querySelector(".bubble").textContent=text;
  messages.appendChild(row);
  messages.scrollTop=messages.scrollHeight;
+}
+
+async function loadApiKey(){
+ try{
+  const res=await fetch(GEMINI_KEY_FILE,{cache:"no-store"});
+  if(!res.ok)throw new Error("API file could not be loaded.");
+  const lines=(await res.text()).split(/\r?\n/);
+  const active=lines.find(line=>line.startsWith("ACTIVE_KEY="));
+  if(active)GEMINI_KEY=active.slice(11).trim();
+ }catch{}
 }
 
 async function loadSiteContext(){
@@ -58,6 +69,7 @@ async function loadSiteContext(){
 
 async function prepare(){
  addMessage("Jølle Bot is loading the project information...",false);
+ await loadApiKey();
  await loadSiteContext();
  const last=messages.lastElementChild;
  if(last)last.remove();
@@ -69,7 +81,7 @@ async function askGemini(text){
  if(!siteContext)await loadSiteContext();
 
 
- const system="You are Jølle Bot, the official AI assistant for the Five Nights at Jølle project. Answer using the current website information and the Google Doc information supplied below. Treat the Google Doc as additional project information. Do not invent facts. If the information is unavailable, say so. Be concise, friendly and clear.\n\nWEBSITE INFORMATION:\n"+siteContext+"\n\nGOOGLE DOC INFORMATION:\n"+docContext;
+ const system="You are Jølle Bot, the official AI assistant for the Five Nights at Jølle project. Answer using the current website information. Do not invent facts. If the information is unavailable, say so. Be concise, friendly and clear.\n\nWEBSITE INFORMATION:\n"+siteContext;
 
  const contents=[];
  for(const item of history)contents.push({role:item.role,parts:[{text:item.text}]});
