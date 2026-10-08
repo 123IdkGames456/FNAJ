@@ -58,5 +58,5 @@ Object.keys(homePeople).forEach(loadHomePerson);
 const hpm=document.getElementById("homeProfileModal"),hpn=document.getElementById("homeProfileName"),hpd=document.getElementById("homeProfileDescription"),hpr=document.getElementById("homeProfileRoles"),hpi=document.getElementById("homeProfileImage");
 document.querySelectorAll(".home-contact-open").forEach(b=>b.addEventListener("click",()=>{const p=homePeople[b.closest("[data-person]").dataset.person],d=p.data;if(!d)return;hpn.textContent=d.name;hpd.textContent=d.description||"";hpr.innerHTML=d.roles.map(x=>'<span class="home-contact-role">'+x+"</span>").join("");hpi.src=p.img;hpm.classList.add("open")}));
 document.getElementById("homeProfileClose").onclick=()=>hpm.classList.remove("open");hpm.addEventListener("click",e=>{if(e.target===hpm)hpm.classList.remove("open")});document.addEventListener("keydown",e=>{if(e.key==="Escape")hpm.classList.remove("open")});
-</script><script src="../dropdown/script.js"></script></body>
+</script><script src="../dropdown/script.js?v=20261008"></script></body>
 </html>
