@@ -21,10 +21,146 @@
 </main>
 <script>
 const input=document.getElementById("input"),send=document.getElementById("send"),messages=document.getElementById("messages");
-function addMessage(text,user){const row=document.createElement("div");row.className="message"+(user?" user":"");row.innerHTML='<div class="avatar">'+(user?"U":"J")+'</div><div class="bubble"></div>';row.querySelector(".bubble").textContent=text;messages.appendChild(row);messages.scrollTop=messages.scrollHeight}
-function submit(){const text=input.value.trim();if(!text)return;addMessage(text,true);input.value="";input.style.height="48px";setTimeout(()=>addMessage("Jølle Bot is still in beta. A real response system has not been connected yet.",false),350)}
-send.addEventListener("click",submit);input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();submit()}});input.addEventListener("input",()=>{input.style.height="48px";input.style.height=Math.min(input.scrollHeight,130)+"px"});
-</script>
+const MODEL="gemini-3.8-flash";
+const API_BASE="https://generativelanguage.googleapis.com/v1beta";
+const KEY_STORAGE="jolleBotGeminiKey";
+const history=[];
+let siteContext="";
+let extraFile=null;
+
+function addMessage(text,user){
+ const row=document.createElement("div");
+ row.className="message"+(user?" user":"");
+ row.innerHTML='<div class="avatar">'+(user?"U":"J")+'</div><div class="bubble"></div>';
+ row.querySelector(".bubble").textContent=text;
+ messages.appendChild(row);
+ messages.scrollTop=messages.scrollHeight;
+}
+
+function getKey(){
+ let key=sessionStorage.getItem(KEY_STORAGE);
+ if(!key){
+  key=prompt("Enter your Gemini API key for Jølle Bot. It is kept only in this browser session and is not saved to GitHub.");
+  if(key)sessionStorage.setItem(KEY_STORAGE,key.trim());
+ }
+ return key?.trim()||"";
+}
+
+async function loadSiteContext(){
+ const pages=[
+  ["Home","../home/"],
+  ["Game","../game/"],
+  ["Gallery","../gallery/"],
+  ["Links","../link-list/"],
+  ["Jølle Bot","../jolle-bot/"]
+ ];
+ const parts=[];
+ for(const [name,url] of pages){
+  try{
+   const res=await fetch(url,{cache:"no-store"});
+   if(!res.ok)continue;
+   const html=await res.text();
+   const doc=new DOMParser().parseFromString(html,"text/html");
+   doc.querySelectorAll("script,style,noscript").forEach(e=>e.remove());
+   const main=doc.querySelector("main")||doc.body;
+   const text=main.textContent.replace(/\s+/g," ").trim();
+   parts.push("=== "+name+" page ===\n"+text.slice(0,18000));
+  }catch{}
+ }
+ siteContext=parts.join("\n\n");
+}
+
+async function loadExtraGeminiFile(key){
+ try{
+  const res=await fetch(API_BASE+"/files?pageSize=100",{headers:{"x-goog-api-key":key}});
+  if(!res.ok)return null;
+  const data=await res.json();
+  const files=(data.files||[]).filter(f=>
+   f.mimeType==="text/plain" &&
+   (!f.state || f.state==="ACTIVE" || f.state==="STATE_ACTIVE")
+  );
+  if(!files.length)return null;
+  return files.find(f=>(f.displayName||"").toLowerCase().includes("extra"))||files[0];
+ }catch{
+  return null;
+ }
+}
+
+async function prepare(){
+ const key=getKey();
+ if(!key)return;
+ addMessage("Jølle Bot is connecting to the project information...",false);
+ await loadSiteContext();
+ extraFile=await loadExtraGeminiFile(key);
+ const last=messages.lastElementChild;
+ if(last)last.remove();
+ addMessage(extraFile?"Jølle Bot is ready. Website pages and the extra Gemini text file are loaded.":"Jølle Bot is ready. Website pages are loaded.",false);
+}
+
+async function askGemini(text){
+ const key=getKey();
+ if(!key)throw new Error("No Gemini API key was provided.");
+ if(!siteContext)await loadSiteContext();
+ if(!extraFile)extraFile=await loadExtraGeminiFile(key);
+
+ const system="You are Jølle Bot, the official AI assistant for the Five Nights at Jølle project. Your name is Jølle Bot. Always identify yourself as Jølle Bot when relevant. Answer questions about the project using the supplied website information and the supplied extra Gemini text file. The website information is the current public project information. The extra text file contains additional project information that may not be on the website. If the sources do not contain an answer, say that Jølle Bot does not have that information rather than inventing it. If asked when the game is coming out, use the current project information: the planned release is late 2026 or early 2027, and the game is not out yet. Be concise, friendly and clear. Do not pretend you can change the project or access private information.\n\nWEBSITE INFORMATION:\n"+siteContext;
+
+ const contents=[];
+ for(const item of history)contents.push({role:item.role,parts:[{text:item.text}]});
+ const userParts=[{text:text}];
+ if(extraFile?.uri&&extraFile?.mimeType)userParts.push({file_data:{mime_type:extraFile.mimeType,file_uri:extraFile.uri}});
+ contents.push({role:"user",parts:userParts});
+
+ const res=await fetch(API_BASE+"/models/"+MODEL+":generateContent",{
+  method:"POST",
+  headers:{"Content-Type":"application/json","x-goog-api-key":key},
+  body:JSON.stringify({
+   system_instruction:{parts:[{text:system}]},
+   contents,
+   generationConfig:{temperature:.45,maxOutputTokens:700}
+  })
+ });
+ const data=await res.json();
+ if(!res.ok)throw new Error(data?.error?.message||"Gemini API request failed.");
+ const answer=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("").trim();
+ if(!answer)throw new Error("Gemini returned an empty response.");
+ return answer;
+}
+
+async function submit(){
+ const text=input.value.trim();
+ if(!text||send.disabled)return;
+ addMessage(text,true);
+ input.value="";
+ input.style.height="48px";
+ send.disabled=true;
+ send.textContent="…";
+ try{
+  const answer=await askGemini(text);
+  history.push({role:"user",text});
+  history.push({role:"model",text:answer});
+  addMessage(answer,false);
+ }catch(error){
+  addMessage("Jølle Bot could not connect to Gemini. "+error.message,false);
+ }finally{
+  send.disabled=false;
+  send.textContent="↑";
+ }
+}
+
+send.addEventListener("click",submit);
+input.addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&!e.shiftKey){
+  e.preventDefault();
+  submit();
+ }
+});
+input.addEventListener("input",()=>{
+ input.style.height="48px";
+ input.style.height=Math.min(input.scrollHeight,130)+"px";
+});
+prepare();
+</script></script>
 <script src="../dropdown/script.js"></script>
 </body>
 </html>
