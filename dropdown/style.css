@@ -73,3 +73,18 @@ body.dark-mode .site-nav nav.open a:hover,body.dark-mode .site-nav nav.open a:fo
 body.dark-mode .site-nav nav.open small{color:#777164!important}
 body.dark-mode .site-nav nav.open .nav-separator{background:#3b382e!important}
 }
+
+body.dark-mode .hero h1,body.dark-mode .section-title,body.dark-mode .card-info strong,body.dark-mode .home-contact-name,body.dark-mode .home-profile-box h3{color:#eee8d9!important}
+body.light-mode .hero h1,body.light-mode .section-title,body.light-mode .card-info strong,body.light-mode .home-contact-name,body.light-mode .home-profile-box h3{color:#292722!important}
+body.dark-mode .hero h1 span{color:#a39b89!important}
+body.light-mode .hero h1 span{color:#625d52!important}
+body.dark-mode .hero-copy,body.dark-mode .intro{color:#c0baaa!important}
+body.light-mode .hero-copy,body.light-mode .intro{color:#655f54!important}
+body.dark-mode .btn{background:#d6ccb5!important;color:#211f1a!important}
+body.light-mode .btn{background:#514b40!important;color:#f5f1e8!important;border-color:#514b40!important}
+body.dark-mode .btn.secondary{background:#24221c!important;color:#c9c1b0!important}
+body.light-mode .btn.secondary{background:#e5e0d5!important;color:#403c34!important;border-color:#aaa293!important}
+body.dark-mode .card,body.dark-mode .home-contact-card,body.dark-mode .faq-item{background:#191813!important;color:#ddd8ca!important}
+body.light-mode .card,body.light-mode .home-contact-card,body.light-mode .faq-item{background:#f2eee6!important;color:#39352e!important}
+body.dark-mode .card-info p,body.dark-mode .home-contact-description{color:#918b7c!important}
+body.light-mode .card-info p,body.light-mode .home-contact-description{color:#6c665b!important}
