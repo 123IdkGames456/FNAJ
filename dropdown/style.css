@@ -180,3 +180,5 @@ section{position:relative}
  .universal-dropdown-menu a{padding:12px!important}
 }
 @media(prefers-reduced-motion:reduce){.universal-dropdown-menu a{transition:none!important}}
+
+.universal-dropdown-menu{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:3px!important}.universal-dropdown-menu .nav-main-link{display:flex!important;flex:0 0 auto!important;width:100%!important;min-height:42px!important;box-sizing:border-box!important;align-items:center!important}.universal-dropdown-menu .nav-main-link:before{flex:0 0 auto!important}.universal-dropdown-menu .nav-main-link:after{right:14px!important}
