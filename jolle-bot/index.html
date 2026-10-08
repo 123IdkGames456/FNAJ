@@ -23,13 +23,12 @@
 const input=document.getElementById("input"),send=document.getElementById("send"),messages=document.getElementById("messages");
 const MODEL="gemini-3.8-flash";
 const API_BASE="https://generativelanguage.googleapis.com/v1beta";
-const KEY_PART_1="EXAMPLE_PART_1";
-const KEY_PART_2="EXAMPLE_PART_2";
-const KEY_PART_3="EXAMPLE_PART_3";
-const GEMINI_KEY=KEY_PART_1+KEY_PART_2+KEY_PART_3;
+const DOC_URL="https://docs.google.com/document/d/1MIKuNVR736siHyaKlUVSmMqZ19l2D07erLeyDcp4hYA/export?format=txt";
+const GEMINI_KEY="";
+
 const history=[];
 let siteContext="";
-let extraFile=null;
+let docContext="";
 
 function addMessage(text,user){
  const row=document.createElement("div");
@@ -40,18 +39,18 @@ function addMessage(text,user){
  messages.scrollTop=messages.scrollHeight;
 }
 
-function getKey(){
- return GEMINI_KEY.trim();
+async function loadDocContext(){
+ try{
+  const res=await fetch(DOC_URL,{cache:"no-store"});
+  if(!res.ok)throw new Error("Google Doc request failed.");
+  docContext=(await res.text()).replace(/\s+/g," ").trim();
+ }catch(error){
+  docContext="";
+ }
 }
 
 async function loadSiteContext(){
- const pages=[
-  ["Home","../home/"],
-  ["Game","../game/"],
-  ["Gallery","../gallery/"],
-  ["Links","../link-list/"],
-  ["Jølle Bot","../jolle-bot/"]
- ];
+ const pages=[["Home","../home/"],["Game","../game/"],["Gallery","../gallery/"],["Links","../link-list/"]];
  const parts=[];
  for(const [name,url] of pages){
   try{
@@ -68,55 +67,29 @@ async function loadSiteContext(){
  siteContext=parts.join("\n\n");
 }
 
-async function loadExtraGeminiFile(key){
- try{
-  const res=await fetch(API_BASE+"/files?pageSize=100",{headers:{"x-goog-api-key":key}});
-  if(!res.ok)return null;
-  const data=await res.json();
-  const files=(data.files||[]).filter(f=>
-   f.mimeType==="text/plain" &&
-   (!f.state || f.state==="ACTIVE" || f.state==="STATE_ACTIVE")
-  );
-  if(!files.length)return null;
-  return files.find(f=>(f.displayName||"").toLowerCase().includes("extra"))||files[0];
- }catch{
-  return null;
- }
-}
-
 async function prepare(){
- const key=getKey();
- if(!key)return;
- addMessage("Jølle Bot is connecting to the project information...",false);
- await loadSiteContext();
- extraFile=await loadExtraGeminiFile(key);
+ addMessage("Jølle Bot is loading the project information...",false);
+ await Promise.all([loadSiteContext(),loadDocContext()]);
  const last=messages.lastElementChild;
  if(last)last.remove();
- addMessage(extraFile?"Jølle Bot is ready. Website pages and the extra Gemini text file are loaded.":"Jølle Bot is ready. Website pages are loaded.",false);
+ addMessage(docContext?"Jølle Bot is ready. The website and Google Doc information are loaded.":"Jølle Bot is ready. The website is loaded, but the Google Doc could not be read.",false);
 }
 
 async function askGemini(text){
- const key=getKey();
- if(!key)throw new Error("No Gemini API key was provided.");
+ if(!GEMINI_KEY)throw new Error("No Gemini API key is configured.");
  if(!siteContext)await loadSiteContext();
- if(!extraFile)extraFile=await loadExtraGeminiFile(key);
+ if(!docContext)await loadDocContext();
 
- const system="You are Jølle Bot, the official AI assistant for the Five Nights at Jølle project. Your name is Jølle Bot. Always identify yourself as Jølle Bot when relevant. Answer questions about the project using the supplied website information and the supplied extra Gemini text file. The website information is the current public project information. The extra text file contains additional project information that may not be on the website. If the sources do not contain an answer, say that Jølle Bot does not have that information rather than inventing it. If asked when the game is coming out, use the current project information: the planned release is late 2026 or early 2027, and the game is not out yet. Be concise, friendly and clear. Do not pretend you can change the project or access private information.\n\nWEBSITE INFORMATION:\n"+siteContext;
+ const system="You are Jølle Bot, the official AI assistant for the Five Nights at Jølle project. Answer using the current website information and the Google Doc information supplied below. Treat the Google Doc as additional project information. Do not invent facts. If the information is unavailable, say so. Be concise, friendly and clear.\n\nWEBSITE INFORMATION:\n"+siteContext+"\n\nGOOGLE DOC INFORMATION:\n"+docContext;
 
  const contents=[];
  for(const item of history)contents.push({role:item.role,parts:[{text:item.text}]});
- const userParts=[{text:text}];
- if(extraFile?.uri&&extraFile?.mimeType)userParts.push({file_data:{mime_type:extraFile.mimeType,file_uri:extraFile.uri}});
- contents.push({role:"user",parts:userParts});
+ contents.push({role:"user",parts:[{text}]});
 
  const res=await fetch(API_BASE+"/models/"+MODEL+":generateContent",{
   method:"POST",
-  headers:{"Content-Type":"application/json","x-goog-api-key":key},
-  body:JSON.stringify({
-   system_instruction:{parts:[{text:system}]},
-   contents,
-   generationConfig:{temperature:.45,maxOutputTokens:700}
-  })
+  headers:{"Content-Type":"application/json","x-goog-api-key":GEMINI_KEY},
+  body:JSON.stringify({system_instruction:{parts:[{text:system}]},contents,generationConfig:{temperature:.45,maxOutputTokens:700}})
  });
  const data=await res.json();
  if(!res.ok)throw new Error(data?.error?.message||"Gemini API request failed.");
@@ -147,18 +120,10 @@ async function submit(){
 }
 
 send.addEventListener("click",submit);
-input.addEventListener("keydown",e=>{
- if(e.key==="Enter"&&!e.shiftKey){
-  e.preventDefault();
-  submit();
- }
-});
-input.addEventListener("input",()=>{
- input.style.height="48px";
- input.style.height=Math.min(input.scrollHeight,130)+"px";
-});
+input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();submit();}});
+input.addEventListener("input",()=>{input.style.height="48px";input.style.height=Math.min(input.scrollHeight,130)+"px";});
 prepare();
-</script></script>
+</script>
 <script src="../dropdown/script.js"></script>
 </body>
 </html>
