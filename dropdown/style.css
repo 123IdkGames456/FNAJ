@@ -36,3 +36,26 @@ body.light-mode .theme-toggle:hover{background:#d9d3c7;color:#292722}
 body.light-mode .universal-dropdown-menu a:focus-visible,body.light-mode .theme-toggle:focus-visible{outline-color:#8d8578}
 body.light-mode img{border-color:#cbc4b6}
 body.light-mode .audio-player,body.light-mode audio{background:#e7e2d8;color:#39352e;border-color:#cbc4b6}
+
+
+body.light-mode .universal-dropdown-menu{background:#faf8f2!important;border-color:#d1cbbd!important;box-shadow:0 14px 35px #0002!important}
+body.light-mode .universal-dropdown-menu a{color:#625d52!important;background:transparent!important}
+body.light-mode .universal-dropdown-menu a:hover,body.light-mode .universal-dropdown-menu a:focus-visible{color:#292722!important;background:#e5e0d5!important}
+body.light-mode .universal-dropdown-menu small{color:#777164!important}
+body.light-mode .universal-dropdown-toggle{color:#625d52!important}
+body.light-mode .universal-dropdown-toggle:hover,body.light-mode .universal-dropdown-toggle:focus-visible{color:#292722!important;background:#e5e0d5!important}
+body.light-mode .nav-separator{background:#d1cbbd!important}
+body.light-mode .site-nav nav{background:#faf8f2!important;border-color:#d1cbbd!important;box-shadow:0 14px 35px #0002!important}
+body.light-mode .site-nav nav .universal-dropdown-menu{background:transparent!important}
+body.dark-mode .universal-dropdown-menu{background:#1b1a15!important;border-color:#3b382e!important;box-shadow:0 14px 35px #0009!important}
+body.dark-mode .universal-dropdown-menu a{color:#aaa394!important;background:transparent!important}
+body.dark-mode .universal-dropdown-menu a:hover,body.dark-mode .universal-dropdown-menu a:focus-visible{color:#eee8d9!important;background:#343127!important}
+body.dark-mode .universal-dropdown-menu small{color:#777164!important}
+body.dark-mode .universal-dropdown-toggle{color:#aaa394!important}
+body.dark-mode .universal-dropdown-toggle:hover,body.dark-mode .universal-dropdown-toggle:focus-visible{color:#eee8d9!important;background:#343127!important}
+body.dark-mode .nav-separator{background:#3b382e!important}
+body.dark-mode .site-nav nav{background:#1b1a15!important;border-color:#3b382e!important;box-shadow:0 14px 35px #0009!important}
+@media(max-width:760px){
+body.light-mode .site-nav nav{background:#faf8f2!important;border-color:#d1cbbd!important}
+body.dark-mode .site-nav nav{background:#1b1a15!important;border-color:#3b382e!important}
+}
