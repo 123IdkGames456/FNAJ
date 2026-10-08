@@ -23,7 +23,10 @@
 const input=document.getElementById("input"),send=document.getElementById("send"),messages=document.getElementById("messages");
 const MODEL="gemini-3.8-flash";
 const API_BASE="https://generativelanguage.googleapis.com/v1beta";
-const KEY_STORAGE="jolleBotGeminiKey";
+const KEY_PART_1="PASTE_KEY_PART_1_HERE";
+const KEY_PART_2="PASTE_KEY_PART_2_HERE";
+const KEY_PART_3="PASTE_KEY_PART_3_HERE";
+const GEMINI_KEY=KEY_PART_1+KEY_PART_2+KEY_PART_3;
 const history=[];
 let siteContext="";
 let extraFile=null;
@@ -38,12 +41,7 @@ function addMessage(text,user){
 }
 
 function getKey(){
- let key=sessionStorage.getItem(KEY_STORAGE);
- if(!key){
-  key=prompt("Enter your Gemini API key for Jølle Bot. It is kept only in this browser session and is not saved to GitHub.");
-  if(key)sessionStorage.setItem(KEY_STORAGE,key.trim());
- }
- return key?.trim()||"";
+ return GEMINI_KEY.trim();
 }
 
 async function loadSiteContext(){
