@@ -19,16 +19,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;padding:16px 22px}.site-na
 <button class="gallery-tab" type="button" aria-expanded="false" data-target="videosPanel">Videos</button>
 <button class="gallery-tab" type="button" aria-expanded="false" data-target="audioPanel">Audio</button>
 </div>
-<div class="gallery-panel" id="imagesPanel" data-gallery="images"><div class="gallery">
-<article class="card"><div class="preview"><img src="../Images/1102960-crop0_225_1314_554-qpcmmsx4-v4.webp" alt="FNAJ image"></div><div class="name">1102960-crop0_225_1314_554-qpcmmsx4-v4.webp</div><a class="download" href="../Images/1102960-crop0_225_1314_554-qpcmmsx4-v4.webp" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/37df717e-2508-4332-9979-1244d0f087b2.png" alt="FNAJ image"></div><div class="name">37df717e-2508-4332-9979-1244d0f087b2.png</div><a class="download" href="../Images/37df717e-2508-4332-9979-1244d0f087b2.png" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Bilde_2026-09-28_120044122.png" alt="FNAJ image"></div><div class="name">Bilde_2026-09-28_120044122.png</div><a class="download" href="../Images/Bilde_2026-09-28_120044122.png" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Bilde_2026-10-05_213933909.png" alt="FNAJ image"></div><div class="name">Bilde_2026-10-05_213933909.png</div><a class="download" href="../Images/Bilde_2026-10-05_213933909.png" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Gemini_Generated_Image_.jpg" alt="FNAJ image"></div><div class="name">Gemini_Generated_Image_.jpg</div><a class="download" href="../Images/Gemini_Generated_Image_.jpg" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Gemini_Generated_Image_avwtjuavwtjuavwt.jpg" alt="FNAJ image"></div><div class="name">Gemini_Generated_Image_avwtjuavwtjuavwt.jpg</div><a class="download" href="../Images/Gemini_Generated_Image_avwtjuavwtjuavwt.jpg" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Pasted image (2).png" alt="FNAJ image"></div><div class="name">Pasted image (2).png</div><a class="download" href="../Images/Pasted image (2).png" download>↓ Download Full Quality</a></article>
-<article class="card"><div class="preview"><img src="../Images/Skjermbilde 2026-09-27 214933.png" alt="FNAJ image"></div><div class="name">Skjermbilde 2026-09-27 214933.png</div><a class="download" href="../Images/Skjermbilde 2026-09-27 214933.png" download>↓ Download Full Quality</a></article>
-</div></div>
+<div class="gallery-panel" id="imagesPanel" data-gallery="images"><div class="gallery" id="imagesList"><div class="empty-gallery">Loading images...</div></div></div>
 <div class="gallery-panel" id="videosPanel" data-gallery="videos"><div class="gallery media-list" id="videosList"><div class="empty-gallery">Loading videos...</div></div></div>
 <div class="gallery-panel" id="audioPanel" data-gallery="audio"><div class="gallery media-list" id="audioList"><div class="empty-gallery">Loading audio...</div></div></div>
 </div></main>
@@ -191,6 +182,45 @@ document.addEventListener("DOMContentLoaded",()=>{
 
  const repo="123IdkGames456/FNAJ",branch="main",api="https://api.github.com/repos/"+repo+"/contents/";
 
+ async function loadImages(){
+  const list=document.getElementById("imagesList");
+  try{
+   const res=await fetch(api+"Images?ref="+branch+"&per_page=100",{headers:{"Accept":"application/vnd.github+json"}});
+   if(!res.ok)throw new Error("GitHub API error");
+   const files=await res.json();
+   const allowed=["png","jpg","jpeg","webp","gif","avif","bmp","svg"];
+   const images=files.filter(file=>file.type==="file"&&allowed.includes(file.name.split(".").pop().toLowerCase()));
+   if(!images.length){list.innerHTML='<div class="empty-gallery">No images found.</div>';return}
+   list.innerHTML="";
+   images.forEach(file=>{
+    const card=document.createElement("article");
+    card.className="card";
+    const preview=document.createElement("div");
+    preview.className="preview";
+    const img=document.createElement("img");
+    img.src=file.download_url;
+    img.alt=file.name;
+    img.loading="lazy";
+    img.decoding="async";
+    preview.appendChild(img);
+    const name=document.createElement("div");
+    name.className="name";
+    name.textContent=file.name;
+    const dl=document.createElement("a");
+    dl.className="download";
+    dl.href=file.download_url;
+    dl.download=file.name;
+    dl.textContent="↓ Download Full Quality";
+    card.appendChild(preview);
+    card.appendChild(name);
+    card.appendChild(dl);
+    list.appendChild(card);
+   });
+  }catch(e){
+   list.innerHTML='<div class="empty-gallery">Could not load images. Please refresh and try again.</div>';
+  }
+ }
+
  async function loadMedia(folder,type,listId){
   const list=document.getElementById(listId);
   try{
@@ -229,6 +259,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
  }
 
+ loadImages();
  loadMedia("Videos","video","videosList");
  loadMedia("Audio","audio","audioList");
 });
